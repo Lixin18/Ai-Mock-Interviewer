@@ -73,25 +73,34 @@ export const evaluateAnswer = async (req, res) => {
 
         let feedbackText = response.text;
         
-        // Clean markdown if present
-        if (feedbackText.startsWith('```json')) {
-            feedbackText = feedbackText.replace('```json', '').replace(/```$/, '').trim();
-        } else if (feedbackText.startsWith('```')) {
-            feedbackText = feedbackText.replace('```', '').replace(/```$/, '').trim();
-        }
+        // Advanced markdown stripping for Gemini
+        feedbackText = feedbackText.replace(/```json/gi, '').replace(/```/g, '').trim();
         
         let feedback;
         try {
             feedback = JSON.parse(feedbackText);
         } catch (e) {
             console.error("Failed to parse Gemini feedback response:", feedbackText);
-            return res.status(500).json({ error: 'Failed to generate valid evaluation feedback.' });
+            // Fallback object so it doesn't crash the user experience completely
+            feedback = {
+                goodPoints: "Could not fetch AI evaluation.",
+                missingPoints: "Please try submitting a more detailed answer.",
+                score: 5
+            };
         }
         
         const session = await Session.findById(sessionId);
         if (session) {
+            // Safe push arrays mapped accurately to Mongoose
+            if (!session.answers) session.answers = [];
+            if (!session.feedbacks) session.feedbacks = [];
+            
             session.answers[questionIndex] = answer;
             session.feedbacks[questionIndex] = feedback;
+            
+            // Explicitly mark modified for mixed arrays in Mongoose
+            session.markModified('answers');
+            session.markModified('feedbacks');
             await session.save();
         }
 

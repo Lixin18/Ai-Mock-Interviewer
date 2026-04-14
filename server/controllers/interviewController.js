@@ -24,12 +24,8 @@ export const startInterview = async (req, res) => {
 
         let questionsText = response.text;
         
-        // Clean markdown backticks if present
-        if(questionsText.startsWith('```json')) {
-            questionsText = questionsText.replace('```json', '').replace(/```$/, '').trim();
-        } else if (questionsText.startsWith('```')) {
-            questionsText = questionsText.replace('```', '').replace(/```$/, '').trim();
-        }
+        // Advanced markdown stripping for Gemini
+        questionsText = questionsText.replace(/```json/gi, '').replace(/```/g, '').trim();
 
         let questions;
         try {

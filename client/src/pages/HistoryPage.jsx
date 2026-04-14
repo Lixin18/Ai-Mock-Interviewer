@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Layers, Calendar, Target, ChevronRight, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const API_BASE = 'http://localhost:5000/api/interview';
+const API_BASE = 'https://ai-mock-interviewer-8w1o.onrender.com/api/interview';
 
 export default function HistoryPage() {
   const [sessions, setSessions] = useState([]);

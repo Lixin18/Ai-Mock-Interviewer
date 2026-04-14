@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Bot, User, Send, Loader2, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const API_BASE = 'http://localhost:5000/api/interview';
+const API_BASE = 'https://ai-mock-interviewer-8w1o.onrender.com/api/interview';
 
 export default function InterviewPage() {
   const location = useLocation();

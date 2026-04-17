@@ -48,7 +48,7 @@ export const startInterview = async (req, res) => {
         res.status(201).json({ sessionId: session._id, questions });
     } catch (error) {
         console.error("Error in startInterview:", error);
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ error: 'Server error', details: error.message });
     }
 };
 
@@ -103,7 +103,7 @@ export const evaluateAnswer = async (req, res) => {
         res.status(200).json(feedback);
     } catch (error) {
         console.error("Error in evaluateAnswer:", error);
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ error: 'Server error', details: error.message });
     }
 };
 

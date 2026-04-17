@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Loader2, Briefcase, User, Settings2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const API_BASE = 'https://ai-mock-interviewer-8w1o.onrender.com/api/interview';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://ai-mock-interviewer-8w1o.onrender.com/api/interview';
 
 export default function SetupPage() {
   const navigate = useNavigate();
@@ -41,7 +41,9 @@ export default function SetupPage() {
       });
     } catch (error) {
       console.error("Error starting interview:", error);
-      alert("Failed to start the interview. Is the backend running?");
+      const errorMessage = error.response?.data?.error || error.response?.data?.details || "Failed to start the interview. Is the backend running?";
+      // Surface specific backend error if available, else fallback
+      alert(`Error: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
